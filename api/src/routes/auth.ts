@@ -23,7 +23,7 @@ router.post(
     [
         body('firstName')
             .notEmpty()
-            .withMessage('You must supply a firstName')
+            .withMessage('You must supply a first name')
             .isLength({
                 min: 3,
                 max: 15,
@@ -31,7 +31,7 @@ router.post(
             .withMessage('First name must be between 3 and 15 characters'),
         body('lastName')
             .notEmpty()
-            .withMessage('You must supply a lastName')
+            .withMessage('You must supply a last name')
             .isLength({
                 min: 3,
                 max: 15,
@@ -41,11 +41,25 @@ router.post(
         body('email').isEmail().withMessage('Email must be valid'),
         body('password')
             .trim()
-            .matches(
-                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
-            )
+            .notEmpty()
+            .withMessage('You must supply a password')
+            .isLength({
+                min: 8,
+            })
+            .withMessage('Password must be at least 8 characters')
+            .matches(/(?=.*?[a-z])/)
             .withMessage(
-                'Password must be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter, and one special character',
+                'Password must contain at least one lowercase character',
+            )
+            .matches(/(?=.*?[A-Z])/)
+            .withMessage(
+                'Password must contain at least one uppercase character',
+            )
+            .matches(/(?=.*?[0-9])/)
+            .withMessage('Password must contain at least one number')
+            .matches(/(?=.*?[#?!@$%^&*-])/)
+            .withMessage(
+                'Password must contain at least one special character',
             ),
         body('confirmedPassword')
             .trim()

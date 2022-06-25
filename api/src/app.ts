@@ -2,7 +2,7 @@ import cookieSession from 'cookie-session';
 import express from 'express';
 import 'express-async-errors';
 import { NotFoundError } from './errors';
-import { errorHandler } from './middlewares';
+import { currentUser, errorHandler } from './middlewares';
 import { authRouter } from './routes';
 
 const app = express();
@@ -15,6 +15,9 @@ app.use(
         secure: process.env.Node_ENV === 'production',
     }),
 );
+
+// add the currentUser middleware to all routes
+app.use(currentUser);
 
 app.use('/auth', authRouter);
 
