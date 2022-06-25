@@ -1,5 +1,5 @@
 import express from 'express';
-import authController from 'src/controllers/auth';
+import { authController } from 'src/controllers';
 const router = express.Router();
 
 router.post('/login', authController.login);
@@ -10,4 +10,4 @@ router.post('/logout', authController.logout);
 
 router.get('/currentuser', authController.currentUser);
 
-export default router;
+export { router as authRouter };

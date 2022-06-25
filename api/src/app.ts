@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import 'express-async-errors';
-import authRouter from './routes/auth';
+import { authRouter } from './routes';
 
 const app = express();
 
