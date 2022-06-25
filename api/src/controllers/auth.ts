@@ -40,8 +40,46 @@ const login = async (req: Request, res: Response) => {
     res.send(user);
 };
 
-const register = (req: Request, res: Response) => {
-    console.log('REGISTER ENDPOINT');
+const register = async (req: Request, res: Response) => {
+    const { firstName, lastName, email, password, phone } = req.body;
+    // 1. Check if a user exists with the given email
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+    });
+    // 2. If a user exists, throw an error
+    if (user) {
+        throw new BadRequestError('Email already exists');
+    }
+    // hash the password
+    const hashedPassword = await PasswordService.toHash(password);
+    // 3. Create a new user
+    const newUser = await prisma.user.create({
+        data: {
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            phone,
+        },
+    });
+
+    // 4. Generate a token
+    const userJwt = jwt.sign(
+        {
+            email: newUser.email,
+            id: newUser.id,
+        },
+        process.env.JWT_SECRET,
+    );
+    // 5. Set the JWT as a cookie on the response
+    req.session = {
+        jwt: userJwt,
+    };
+
+    excludeFields(newUser, 'password');
+    res.status(200).send(newUser);
 };
 
 const currentUser = (req: Request, res: Response) => {
