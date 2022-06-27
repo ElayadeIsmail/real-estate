@@ -78,16 +78,21 @@ const register = async (req: Request, res: Response) => {
         jwt: userJwt,
     };
 
+    // remove the password from the user object
     excludeFields(newUser, 'password');
     res.status(200).send(newUser);
 };
 
+// router for getting the current user
 const currentUser = (req: Request, res: Response) => {
-    console.log('CURRENT USER ENDPOINT');
+    res.send({ currentUser: req?.currentUser || null });
 };
 
+// router for logging out
 const logout = (req: Request, res: Response) => {
-    console.log('LOGOUT ENDPOINT');
+    // 1. Clear the JWT cookie
+    req.session = null;
+    res.send({});
 };
 
 export default { login, register, currentUser, logout };
