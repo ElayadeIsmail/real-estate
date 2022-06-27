@@ -10,7 +10,7 @@ import { authRouter, profileRouter } from './routes';
 const app = express();
 
 // Set up the express application to use JSON middleware
-app.use(express.json());
+app.use(express.json({ limit: '30mb' }));
 
 // Set up the express application to use cookie-session middleware
 app.use(
@@ -22,6 +22,9 @@ app.use(
 
 // Set up the express application to use the serve static assets middleware
 app.use(express.static(join(__dirname, '..', 'public')));
+
+// Set up route for serving uploaded files
+app.use('upload', express.static(join(__dirname, '..', 'public', 'upload')));
 
 // add the currentUser middleware to all routes
 app.use(currentUser);
