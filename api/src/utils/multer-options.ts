@@ -1,9 +1,9 @@
 import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
-import { BadRequestError } from 'src/errors';
 import { v4 as uuid } from 'uuid';
 import { MAX_FILE_SIZE } from '../constants';
+import { BadRequestError } from '../errors';
 
 // Multer upload options
 export const multerOptions = {
@@ -12,7 +12,7 @@ export const multerOptions = {
         fileSize: MAX_FILE_SIZE,
     },
     // Check the mimetypes to allow for upload
-    fileFilter: (req: any, file: any, cb: any) => {
+    fileFilter: (req, file, cb: any) => {
         if (file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
             // Allow storage of file
             cb(null, true);

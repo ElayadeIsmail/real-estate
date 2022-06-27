@@ -1,7 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { authController } from '../controllers';
-import { validateRequest } from '../middlewares';
+import { requireAuth, validateRequest } from '../middlewares';
 
 const router = express.Router();
 
@@ -40,26 +40,14 @@ router.post(
         body('phone').isMobilePhone('ar-MA').withMessage('Phone must be valid'),
         body('email').isEmail().withMessage('Email must be valid'),
         body('password')
-            .trim()
-            .notEmpty()
-            .withMessage('You must supply a password')
-            .isLength({
-                min: 8,
+            .isStrongPassword({
+                minLength: 8,
+                minLowercase: 1,
+                minUppercase: 1,
+                minNumbers: 1,
             })
-            .withMessage('Password must be at least 8 characters')
-            .matches(/(?=.*?[a-z])/)
             .withMessage(
-                'Password must contain at least one lowercase character',
-            )
-            .matches(/(?=.*?[A-Z])/)
-            .withMessage(
-                'Password must contain at least one uppercase character',
-            )
-            .matches(/(?=.*?[0-9])/)
-            .withMessage('Password must contain at least one number')
-            .matches(/(?=.*?[#?!@$%^&*-])/)
-            .withMessage(
-                'Password must contain at least one special character',
+                'Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, and one number',
             ),
         body('confirmedPassword')
             .trim()
@@ -74,7 +62,7 @@ router.post(
     authController.register,
 );
 
-router.post('/logout', authController.logout);
+router.post('/logout', requireAuth, authController.logout);
 
 router.get('/currentuser', authController.currentUser);
 
