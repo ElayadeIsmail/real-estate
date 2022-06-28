@@ -4,37 +4,13 @@ import { join } from 'path';
 import { NotFoundError } from './errors';
 import { currentUser, errorHandler } from './middlewares';
 import { authRouter, profileRouter } from './routes';
+import { sendEmail } from './services/email';
 
 // Create a new express application
 const app = express();
 
 // Set up the express application to use JSON middleware
 app.use(express.json({ limit: '30mb' }));
-
-// Set up the express application to use cookie-session middleware
-// app.use(
-//     cookieSession({
-//         signed: false,
-//         secure: process.env.Node_ENV === 'production',
-//     }),
-// );
-
-// app.use(
-//     session({
-//         store: new RedisStore({ client: redisClient }),
-//         saveUninitialized: false,
-//         name: COOKIE_NAME,
-//         secret: process.env.SESSION_SECRET!,
-//         resave: false,
-//         cookie: {
-//             secure: IS_PROD,
-//             httpOnly: true,
-//             sameSite: 'lax',
-//             signed: false,
-//             maxAge: 1000 * 60 * 60 * 24 * 7,
-//         },
-//     }),
-// );
 
 // Set up the express application to use the serve static assets middleware
 app.use(express.static(join(__dirname, '..', 'public')));
@@ -50,6 +26,11 @@ app.use('/auth', authRouter);
 
 // register the profile routes
 app.use('/profile', profileRouter);
+
+app.get('/email', async (req, res) => {
+    await sendEmail();
+    res.send('Email sent');
+});
 
 app.all('*', () => {
     throw new NotFoundError();

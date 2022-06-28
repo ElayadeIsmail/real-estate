@@ -22,7 +22,7 @@ export const currentUser = async (
     next: NextFunction,
 ) => {
     // if there is no JWT, continue to the next middleware
-    const token = req.header('Authorization')?.replace('Bearer ', '') || '';
+    const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) {
         return next();
     }

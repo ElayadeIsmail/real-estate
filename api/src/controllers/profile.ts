@@ -1,8 +1,8 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { join } from 'path';
-import { prisma } from 'src/prisma/prisma';
 import { UPLOAD_FILE_PATH } from '../constants';
+import { prisma } from '../prisma/prisma';
 import { renameFile } from '../utils';
 
 const get = async (req: Request, res: Response) => {
@@ -35,6 +35,13 @@ const update = async (req: Request, res: Response) => {
     const newUser = await prisma.user.update({
         where: { id: userId },
         data: { phone },
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+        },
     });
     res.send(newUser);
 };

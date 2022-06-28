@@ -7,6 +7,9 @@ declare global {
       JWT_SECRET: string;
       REDIS_URI: string;
       COOKIE_SECRET: string;
+      SMTP_HOST: string;
+      SMTP_PORT: string;
+      ADMIN_EMAIL: string;
     }
   }
 }
