@@ -1,7 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { authController } from '../controllers';
-import { requireAuth, validateRequest } from '../middlewares';
+import { validateRequest } from '../middlewares';
 
 const router = express.Router();
 
@@ -62,8 +62,6 @@ router.post(
     validateRequest,
     authController.register,
 );
-
-router.post('/logout', requireAuth, authController.logout);
 
 router.get('/currentuser', authController.currentUser);
 
