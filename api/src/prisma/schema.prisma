@@ -15,6 +15,7 @@ model User {
   email       String   @unique
   firstName   String   @map("first_name")
   lastName    String   @map("last_name")
+  avatar      String?  @default("avatar-placeholder.jpg") @map("avatar")
   password    String
   phone       String
   isConfirmed Boolean  @default(false)
