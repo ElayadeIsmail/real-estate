@@ -1,0 +1,3 @@
+export enum QueuesNames {
+    DELETE_USER_IF_NOT_CONFIRMED = 'DELETE_USER_IF_NOT_CONFIRMED',
+}
