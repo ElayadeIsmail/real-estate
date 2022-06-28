@@ -33,11 +33,8 @@ const login = async (req: Request, res: Response) => {
         },
         process.env.JWT_SECRET,
     );
-    req.session = {
-        jwt: userJwt,
-    };
     excludeFields(user, 'password');
-    res.send(user);
+    res.send({ accessToken: userJwt, user });
 };
 
 const register = async (req: Request, res: Response) => {
@@ -73,14 +70,9 @@ const register = async (req: Request, res: Response) => {
         },
         process.env.JWT_SECRET,
     );
-    // 5. Set the JWT as a cookie on the response
-    req.session = {
-        jwt: userJwt,
-    };
-
     // remove the password from the user object
     excludeFields(newUser, 'password');
-    res.status(200).send(newUser);
+    res.status(200).send({ accessToken: userJwt, newUser });
 };
 
 // router for getting the current user
@@ -88,11 +80,4 @@ const currentUser = (req: Request, res: Response) => {
     res.send({ currentUser: req?.currentUser || null });
 };
 
-// router for logging out
-const logout = (req: Request, res: Response) => {
-    // 1. Clear the JWT cookie
-    req.session = null;
-    res.send({});
-};
-
-export default { login, register, currentUser, logout };
+export default { login, register, currentUser };

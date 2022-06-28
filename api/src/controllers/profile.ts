@@ -1,25 +1,49 @@
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
+import { join } from 'path';
 import { UPLOAD_FILE_PATH } from '../constants';
+import { prisma } from '../prisma/prisma';
 import { renameFile } from '../utils';
-import {join } from "path"
 
-const get = (req: Request, res: Response) => {
-    console.log(__dirname);
-    res.send({});
+const get = async (req: Request, res: Response) => {
+    const userId = req.currentUser!.id;
+    const user = (await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+        },
+    })) as User;
+    res.send(user);
 };
 
+// update user avatar
 const updateAvatar = async (req: Request, res: Response) => {
     const file = req.file!;
-    const dist = join(
-        UPLOAD_FILE_PATH,
-        req.currentUser!.id.toString(),
-    );
+    const dist = join(UPLOAD_FILE_PATH, req.currentUser!.id.toString());
     await renameFile(file.filename, dist);
     res.send({ message: 'success' });
 };
 
-const update = (req: Request, res: Response) => {
-    res.send({});
+// update user phone
+const update = async (req: Request, res: Response) => {
+    const userId = req.currentUser!.id;
+    const { phone } = req.body;
+    const newUser = await prisma.user.update({
+        where: { id: userId },
+        data: { phone },
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+        },
+    });
+    res.send(newUser);
 };
 
 export default { get, updateAvatar, update };

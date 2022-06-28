@@ -22,13 +22,14 @@ export const currentUser = async (
     next: NextFunction,
 ) => {
     // if there is no JWT, continue to the next middleware
-    if (!req.session?.jwt) {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
         return next();
     }
     try {
         // decode the JWT to get the user id and email
         const payload = jwt.verify(
-            req.session.jwt,
+            token,
             process.env.JWT_SECRET,
         ) as UserPayload;
         // add the user to the Request object

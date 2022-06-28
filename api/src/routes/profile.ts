@@ -1,5 +1,5 @@
 import express from 'express';
-import { check } from 'express-validator';
+import { body, check } from 'express-validator';
 import { profileController } from '../controllers';
 import { requireAuth, upload, validateRequest } from '../middlewares';
 
@@ -21,7 +21,13 @@ router.post(
     profileController.updateAvatar,
 );
 
-// update profile
-router.put('/', requireAuth, profileController.update);
+// update profile Phone
+router.patch(
+    '/',
+    requireAuth,
+    body('phone').isMobilePhone('ar-MA').withMessage('Phone must be valid'),
+    validateRequest,
+    profileController.update,
+);
 
 export { router as profileRouter };

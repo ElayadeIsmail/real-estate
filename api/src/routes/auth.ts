@@ -1,7 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { authController } from '../controllers';
-import { requireAuth, validateRequest } from '../middlewares';
+import { validateRequest } from '../middlewares';
 
 const router = express.Router();
 
@@ -45,9 +45,10 @@ router.post(
                 minLowercase: 1,
                 minUppercase: 1,
                 minNumbers: 1,
+                minSymbols: 1,
             })
             .withMessage(
-                'Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, and one number',
+                'Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, one number, and one character',
             ),
         body('confirmedPassword')
             .trim()
@@ -61,8 +62,6 @@ router.post(
     validateRequest,
     authController.register,
 );
-
-router.post('/logout', requireAuth, authController.logout);
 
 router.get('/currentuser', authController.currentUser);
 
