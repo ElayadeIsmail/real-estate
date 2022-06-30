@@ -6,13 +6,18 @@ const transporter = nodeMailer.createTransport({
     port: +process.env.SMTP_PORT,
     secure: IS_PROD,
 });
-export const sendEmail = async () => {
+export const sendEmail = async (
+    to: string,
+    subject: string,
+    html: string,
+    text?: string,
+) => {
     const mailOptions = {
         from: process.env.ADMIN_EMAIL,
-        to: 'receiver@gmai.com',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!',
-        html: '<h1>Welcome</h1>',
+        to,
+        subject,
+        html,
+        text,
     };
     try {
         const res = await transporter.sendMail(mailOptions);

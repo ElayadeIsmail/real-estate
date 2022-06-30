@@ -11,6 +11,7 @@ declare global {
       SMTP_HOST: string;
       SMTP_PORT: string;
       ADMIN_EMAIL: string;
+      FRONTEND_URL: string;
     }
   }
 }

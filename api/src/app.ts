@@ -4,7 +4,6 @@ import { join } from 'path';
 import { NotFoundError } from './errors';
 import { currentUser, errorHandler } from './middlewares';
 import { authRouter, profileRouter } from './routes';
-import { sendEmail } from './services/email';
 
 // Create a new express application
 const app = express();
@@ -26,11 +25,6 @@ app.use('/auth', authRouter);
 
 // register the profile routes
 app.use('/profile', profileRouter);
-
-app.get('/email', async (req, res) => {
-    await sendEmail();
-    res.send('Email sent');
-});
 
 app.all('*', () => {
     throw new NotFoundError();
