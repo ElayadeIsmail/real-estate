@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { deleteUserIfNotConfirmedQueue } from 'src/queues/delete-user-if-not-confirmed';
-import { redis } from 'src/services/redis';
-import { createConfirmationUrl } from 'src/utils';
 import { BadRequestError } from '../errors';
-import { prisma } from '../prisma/prisma';
+import { deleteUserIfNotConfirmedQueue } from '../queues/delete-user-if-not-confirmed';
 import { sendEmail } from '../services/email';
 import { PasswordService } from '../services/password-service';
+import { prisma } from '../services/prisma';
+import { redis } from '../services/redis';
+import { createConfirmationUrl } from '../utils';
 import { excludeFields } from '../utils/exclude-fields';
 
 // LOGIN ENDPOINT

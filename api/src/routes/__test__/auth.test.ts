@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import request from 'supertest';
+import { app } from '../../app';
+import { prisma } from '../../services/prisma';
 
 afterAll(async () => {
     await prisma.$disconnect();
@@ -17,4 +17,5 @@ it('should create a new user', async () => {
         },
     });
     expect(user.id).toEqual(1);
+    return request(app).send({});
 });
