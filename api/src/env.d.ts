@@ -9,7 +9,7 @@ declare global {
       COOKIE_SECRET: string;
       SMTP_HOST: string;
       SMTP_PORT: string;
-      ADMIN_EMAIL: string;
+      MAILER_FROM: string;
       FRONTEND_URL: string;
     }
   }

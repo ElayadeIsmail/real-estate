@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
+import { readFile } from 'fs/promises';
 import jwt from 'jsonwebtoken';
+import { join } from 'path';
 import { BadRequestError } from '../errors';
 import { deleteUserIfNotConfirmedQueue } from '../queues/delete-user-if-not-confirmed';
 import { sendEmail } from '../services/email';
@@ -71,10 +73,17 @@ const register = async (req: Request, res: Response) => {
 
     const confirmationUrl = await createConfirmationUrl(newUser.id);
     // 4. Send a confirmation email to the user
+    const html = await readFile(
+        join(__dirname, '../../templates/confirm-email.html'),
+        'utf8',
+    );
+    console.log('HTML', html);
+
+    console.log(`href="${confirmationUrl}"`);
     await sendEmail(
         newUser.email,
         'Confirm your email',
-        `<a target="_blank" href="${confirmationUrl}">Click Here to confirm your email</a>`,
+        html.replace('[%url%]"', confirmationUrl),
     );
 
     // add user to queue for deleting if not confirmed after one day

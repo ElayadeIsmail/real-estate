@@ -13,7 +13,7 @@ export const sendEmail = async (
     text?: string,
 ) => {
     const mailOptions = {
-        from: process.env.ADMIN_EMAIL,
+        from: process.env.MAILER_FROM,
         to,
         subject,
         html,
