@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ['./app/**/*.{js,ts,jsx,tsx}'],
+    content: ['./src/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
             container: {
@@ -17,8 +17,9 @@ module.exports = {
                 card: '4px 16px 32px rgba(70, 87, 147, 0.12)',
             },
             colors: {
-                primary: '#6865FA',
-                secondary: '#DDF247',
+                primary: '#0190FF',
+                primaryDark: '#242748',
+                secondary: '#F1C751',
                 dark: '#101010',
                 gray50: '#F1F1F1',
                 gray100: '#F8F8F8',

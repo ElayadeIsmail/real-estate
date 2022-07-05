@@ -77,9 +77,7 @@ const register = async (req: Request, res: Response) => {
         join(__dirname, '../../templates/confirm-email.html'),
         'utf8',
     );
-    console.log('HTML', html);
 
-    console.log(`href="${confirmationUrl}"`);
     await sendEmail(
         newUser.email,
         'Confirm your email',

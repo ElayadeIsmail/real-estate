@@ -16,7 +16,7 @@ export const Input: React.FC<InputProps> = ({
         <div className={`flex flex-col ${className}`}>
             <Label title={label} />
             <input
-                className='h-11 px-3 w-full rounded-lg border border-gray150 bg-white text-sm placeholder:text-gray800 focus:border-dark focus:outline-none'
+                className='h-11 px-3 w-full rounded-lg border border-gray150 bg-white text-sm placeholder:text-gray800 focus:border-2 focus:border-primary shadow-sm focus:outline-none'
                 {...rest}
             />
         </div>
