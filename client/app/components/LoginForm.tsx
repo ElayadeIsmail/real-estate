@@ -13,7 +13,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ isOpen, onClose }) => {
                 <div className='flex flex-col space-y-2  w-full'>
                     <Input label='Email' placeholder='email' />
                     <Input label='Password' placeholder='password' />
-                    <Button title='Login' secondary />
+                    <Button title='Login' primary />
                 </div>
             </form>
         </Modal>

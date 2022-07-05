@@ -44,7 +44,7 @@ export const Modal: React.FC<ModalProps> = ({
                                     <header className='relative px-6 w-full h-16 flex items-center justify-center border-b border-[rgb(235, 235, 235)]'>
                                         <button
                                             onClick={onClose}
-                                            className='absolute top-5 left-6'
+                                            className='absolute top-5 left-6 text-gray-800'
                                         >
                                             X
                                         </button>

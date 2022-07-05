@@ -14,8 +14,18 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         <Modal title='Register' isOpen={isOpen} onClose={onClose}>
             <form>
                 <div className='flex flex-col space-y-2  w-full'>
-                    <Input label='FirstName' placeholder='firstname' />
-                    <Input label='LastName' placeholder='lastname' />
+                    <div className='flex space-x-3'>
+                        <Input
+                            className='flex-1'
+                            label='FirstName'
+                            placeholder='firstname'
+                        />
+                        <Input
+                            className='flex-1'
+                            label='LastName'
+                            placeholder='lastname'
+                        />
+                    </div>
                     <Input label='Email' placeholder='email' />
                     <Input label='Phone' placeholder='phone' />
                     <Input label='Password' placeholder='password' />
@@ -23,7 +33,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
                         label='Confirmed Password'
                         placeholder='confirmed password'
                     />
-                    <Button title='Register' secondary />
+                    <Button title='Register' primary />
                 </div>
             </form>
         </Modal>

@@ -11,9 +11,7 @@ export const Header = () => {
             <div className='relative'>
                 <img alt='logo' src='/assets/logo.svg' className='w-12 h-12' />
             </div>
-            <div className='flex-1 flex items-center justify-center'>
-                Filter
-            </div>
+            {/* NEED TO ADD SOME THING HERE */}
             <div className='flex space-x-3'>
                 <Button
                     onClick={() => setIsRegisterOpen(true)}
@@ -22,7 +20,7 @@ export const Header = () => {
                 />
                 <Button
                     onClick={() => setIsLoginOpen(true)}
-                    secondary
+                    primary
                     title='Login'
                 />
             </div>

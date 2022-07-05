@@ -20,7 +20,7 @@ export const Button = ({
         <button
             className={clsx(`${className} rounded py-2 px-4`, {
                 'bg-primary text-white': primary,
-                'border-light border bg-white text-dark': outline,
+                'border-gray150 border bg-white text-dark': outline,
                 'bg-secondary text-dark': secondary,
             })}
             {...rest}

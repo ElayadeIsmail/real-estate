@@ -22,8 +22,10 @@ module.exports = {
                 dark: '#101010',
                 gray50: '#F1F1F1',
                 gray100: '#F8F8F8',
+                gray150: '#E9E9E9',
                 gray200: '#EBEBEB',
                 gray500: '#6F6F6F',
+                gray800: '#999999',
             },
             fontFamily: {
                 sans: ['"Urbanist"', 'sans-serif'],
