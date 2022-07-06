@@ -1,5 +1,5 @@
 import express from 'express';
-import { body } from 'express-validator';
+import { check } from 'express-validator';
 import { authController } from '../controllers';
 import { validateRequest } from '../middlewares';
 
@@ -8,8 +8,8 @@ const router = express.Router();
 router.post(
     '/login',
     [
-        body('email').isEmail().withMessage('Email must be valid'),
-        body('password')
+        check('email').isEmail().withMessage('Email must be valid'),
+        check('password')
             .trim()
             .notEmpty()
             .withMessage('You must supply a password'),
@@ -21,7 +21,7 @@ router.post(
 router.post(
     '/register',
     [
-        body('firstName')
+        check('firstName')
             .notEmpty()
             .withMessage('You must supply a first name')
             .isLength({
@@ -29,7 +29,7 @@ router.post(
                 max: 15,
             })
             .withMessage('First name must be between 3 and 15 characters'),
-        body('lastName')
+        check('lastName')
             .notEmpty()
             .withMessage('You must supply a last name')
             .isLength({
@@ -37,9 +37,11 @@ router.post(
                 max: 15,
             })
             .withMessage('Last name must be between 3 and 15 characters'),
-        body('phone').isMobilePhone('ar-MA').withMessage('Phone must be valid'),
-        body('email').isEmail().withMessage('Email must be valid'),
-        body('password')
+        check('phone')
+            .isMobilePhone('ar-MA')
+            .withMessage('Phone must be valid'),
+        check('email').isEmail().withMessage('Email must be valid'),
+        check('password')
             .isStrongPassword({
                 minLength: 8,
                 minLowercase: 1,
@@ -50,7 +52,7 @@ router.post(
             .withMessage(
                 'Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, one number, and one character',
             ),
-        body('confirmedPassword')
+        check('confirmedPassword')
             .trim()
             .custom((value, { req }) => {
                 if (value !== req.body.password) {
