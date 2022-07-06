@@ -55,6 +55,8 @@ model City {
   zones     Zone[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("cities")
 }
 
 model Zone {
@@ -65,6 +67,8 @@ model Zone {
   listings  Listing[]
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @default(now()) @map("updated_at")
+
+  @@map("zones")
 }
 
 model ListingImage {
@@ -74,6 +78,8 @@ model ListingImage {
   listing   Listing  @relation(fields: [listingId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("listing_images")
 }
 
 model Listing {
@@ -93,4 +99,6 @@ model Listing {
   address        String
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @default(now()) @map("updated_at")
+
+  @@map("listings")
 }
