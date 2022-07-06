@@ -3,7 +3,7 @@ import 'express-async-errors';
 import { join } from 'path';
 import { NotFoundError } from './errors';
 import { currentUser, errorHandler } from './middlewares';
-import { authRouter, profileRouter } from './routes';
+import { authRouter, citiesRouter, profileRouter } from './routes';
 
 // Create a new express application
 const app = express();
@@ -25,6 +25,9 @@ app.use('/auth', authRouter);
 
 // register the profile routes
 app.use('/profile', profileRouter);
+
+// register the cities routes
+app.use('/cities', citiesRouter);
 
 app.all('*', () => {
     throw new NotFoundError();
