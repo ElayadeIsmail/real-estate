@@ -1,6 +1,7 @@
 import { ListingPricePeriod, ListingType } from '@prisma/client';
 import express from 'express';
-import { check, param } from 'express-validator';
+import { check, param, query } from 'express-validator';
+import { PAGINATION_DEFAULT_LIMIT } from '../constants';
 import { listingsController } from '../controllers';
 import { requireAuth, upload, validateRequest } from '../middlewares';
 import { prisma } from '../prisma/prisma';
@@ -102,7 +103,27 @@ router.get(
     listingsController.findOne,
 );
 
-router.get('/', listingsController.findAll);
+router.get(
+    '/',
+    [
+        query('limit')
+            .default(PAGINATION_DEFAULT_LIMIT)
+            .toInt()
+            .isInt({
+                min: 10,
+            })
+            .withMessage('Limit must be a number'),
+        query('cursor')
+            .default(0)
+            .toInt()
+            .isInt({
+                min: 0,
+            })
+            .withMessage('Cursor must be a valid integer'),
+    ],
+    validateRequest,
+    listingsController.findAll,
+);
 
 router.put(
     '/:id',
