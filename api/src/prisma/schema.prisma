@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  firstName   String   @map("first_name")
+  lastName    String   @map("last_name")
+  avatar      String?  @default("avatar-placeholder.jpg") @map("avatar")
+  password    String
+  phone       String
+  isConfirmed Boolean  @default(false)
+  isAdmin     Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+
+  @@map("users")
+}
+
+enum ListingType {
+  Rent
+  Sale
+}
+
+enum ListingPricePeriod {
+  Day
+  Week
+  Month
+  Year
+}
+
+model ListingPrice {
+  id        Int                 @id @default(autoincrement())
+  price     Float
+  peroid    ListingPricePeriod? @map("peroid")
+  listing   Listing?
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @default(now()) @map("updated_at")
+
+  @@map("listing_prices")
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  name      Json     @unique
+  zones     Zone[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+
+model Zone {
+  id        Int       @id @default(autoincrement())
+  name      Json      @unique
+  cityId    Int       @map("city_id")
+  city      City      @relation(fields: [cityId], references: [id])
+  listings  Listing[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+}
+
+model ListingImage {
+  id        Int      @id @default(autoincrement())
+  url       String
+  listingId Int      @map("listing_id")
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+
+model Listing {
+  id             Int            @id @default(autoincrement())
+  title          String
+  slug           String         @unique
+  descripton     Json?
+  type           ListingType
+  listingPriceId Int            @unique @map("listing_price_id")
+  price          ListingPrice   @relation(fields: [listingPriceId], references: [id])
+  images         ListingImage[]
+  zoneId         Int            @map("zone_id")
+  zone           Zone           @relation(fields: [zoneId], references: [id])
+  bedrooms       Int
+  bathrooms      Int
+  area           Float
+  address        String
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @default(now()) @map("updated_at")
+}

@@ -1,5 +1,5 @@
 import bull from 'bull';
-import { prisma } from '../services/prisma';
+import { prisma } from '../prisma/prisma';
 import { QueuesNames } from './queues-names';
 
 interface IPayload {

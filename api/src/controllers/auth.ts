@@ -6,7 +6,7 @@ import { BadRequestError } from '../errors';
 import { deleteUserIfNotConfirmedQueue } from '../queues/delete-user-if-not-confirmed';
 import { sendEmail } from '../services/email';
 import { PasswordService } from '../services/password-service';
-import { prisma } from '../services/prisma';
+import { prisma } from '../prisma/prisma';
 import { redis } from '../services/redis';
 import { createConfirmationUrl } from '../utils';
 import { excludeFields } from '../utils/exclude-fields';
