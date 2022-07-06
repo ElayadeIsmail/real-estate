@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  firstName   String   @map("first_name")
-  lastName    String   @map("last_name")
-  avatar      String?  @default("avatar-placeholder.jpg") @map("avatar")
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  firstName   String    @map("first_name")
+  lastName    String    @map("last_name")
+  avatar      String?   @default("avatar-placeholder.jpg") @map("avatar")
   password    String
   phone       String
-  isConfirmed Boolean  @default(false)
-  isAdmin     Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @map("updated_at")
+  isConfirmed Boolean   @default(false)
+  isAdmin     Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @map("updated_at")
+  listings    Listing[]
 
   @@map("users")
 }
@@ -41,7 +42,7 @@ enum ListingPricePeriod {
 model ListingPrice {
   id        Int                 @id @default(autoincrement())
   price     Float
-  peroid    ListingPricePeriod? @map("peroid")
+  period    ListingPricePeriod?
   listing   Listing?
   createdAt DateTime            @default(now()) @map("created_at")
   updatedAt DateTime            @default(now()) @map("updated_at")
@@ -91,6 +92,8 @@ model Listing {
   listingPriceId Int            @unique @map("listing_price_id")
   price          ListingPrice   @relation(fields: [listingPriceId], references: [id])
   images         ListingImage[]
+  userId         Int            @map("user_id")
+  user           User           @relation(fields: [userId], references: [id])
   zoneId         Int            @map("zone_id")
   zone           Zone           @relation(fields: [zoneId], references: [id])
   bedrooms       Int

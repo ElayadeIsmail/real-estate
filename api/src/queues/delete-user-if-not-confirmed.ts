@@ -2,6 +2,7 @@ import bull from 'bull';
 import { prisma } from '../prisma/prisma';
 import { QueuesNames } from './queues-names';
 
+// DELETE USER IF NOT CONFIRMED EMAIL IN 24 HOURS (1 DAY)
 interface IPayload {
     userId: number;
 }
@@ -17,7 +18,7 @@ const deleteUserIfNotConfirmedQueue = new bull<IPayload>(
 
 // deleteUserIfNotConfirmedQueue is a Bull queue.
 deleteUserIfNotConfirmedQueue.process(async ({ data }) => {
-    // ge user from database
+    // get user from database
     const user = await prisma.user.findUnique({
         where: {
             id: data.userId,

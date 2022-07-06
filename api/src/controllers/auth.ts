@@ -5,7 +5,7 @@ import { join } from 'path';
 import { BadRequestError } from '../errors';
 import { deleteUserIfNotConfirmedQueue } from '../queues/delete-user-if-not-confirmed';
 import { sendEmail } from '../services/email';
-import { PasswordService } from '../services/password-service';
+import { PasswordService } from '../services/password';
 import { prisma } from '../prisma/prisma';
 import { redis } from '../services/redis';
 import { createConfirmationUrl } from '../utils';
