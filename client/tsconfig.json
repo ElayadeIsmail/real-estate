@@ -9,7 +9,8 @@
         "paths": {
             "~/components/*": ["components/*"],
             "~/icons/*": ["icons/*"],
-            "~/utils/*": ["utils/*"]
+            "~/utils/*": ["utils/*"],
+            "~/constants/*": ["constants/*"]
         },
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
