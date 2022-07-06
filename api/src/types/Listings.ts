@@ -14,3 +14,8 @@ export interface CreateListingsInput {
     area: number;
     address: string;
 }
+
+export interface ListingFindAllQueryArgs {
+    limit: number;
+    cursor: number;
+}

@@ -1,12 +1,18 @@
 import { Request, Response } from 'express';
 import { join } from 'path';
-import { UPLOAD_FILE_PATH } from '../constants';
-import { NotFoundError } from '../errors';
+import { PAGINATION_MAX_LIMIT, UPLOAD_FILE_PATH } from '../constants';
+import { NotAuthorizedError, NotFoundError } from '../errors';
 import { prisma } from '../prisma/prisma';
-import { CreateListingsInput } from '../types/listings';
+import {
+    CreateListingsInput,
+    ListingFindAllQueryArgs,
+} from '../types/listings';
 import { generateSlugFromTitle, renameFile } from '../utils';
 
 const findAll = async (req: Request, res: Response) => {
+    const { limit, cursor } = req.query as unknown as ListingFindAllQueryArgs;
+    const realLimit = Math.min(limit, PAGINATION_MAX_LIMIT);
+    const limitPlusOne = realLimit + 1;
     const listings = await prisma.listing.findMany({
         include: {
             images: {
@@ -28,8 +34,22 @@ const findAll = async (req: Request, res: Response) => {
                 select: { name: true, city: { select: { name: true } } },
             },
         },
+        cursor:
+            cursor === 0
+                ? undefined
+                : {
+                      id: cursor,
+                  },
+        skip: 1,
+        take: limitPlusOne,
+        orderBy: {
+            id: 'desc',
+        },
     });
-    res.send(listings);
+    res.send({
+        listings: listings.slice(0, realLimit),
+        hasMore: listings.length === limitPlusOne,
+    });
 };
 
 const findOne = async (req: Request, res: Response) => {
@@ -82,11 +102,32 @@ const create = async (
         },
     });
     // send listing id
-    res.send(listing);
+    res.status(201).send(listing);
 };
 
 const update = async (req: Request, res: Response) => {};
 
-const remove = async (req: Request, res: Response) => {};
+const remove = async (req: Request, res: Response) => {
+    const id = +req.params.id;
+    const listing = await prisma.listing.findUnique({
+        where: {
+            id,
+        },
+        select: {
+            id: true,
+            userId: true,
+        },
+    });
+    if (!listing) {
+        throw new NotFoundError();
+    }
+    if (listing.userId !== req.currentUser!.id) {
+        throw new NotAuthorizedError();
+    }
+    await prisma.listing.delete({
+        where: { id },
+    });
+    res.status(204).send(listing);
+};
 
 export default { findAll, findOne, create, update, remove };
