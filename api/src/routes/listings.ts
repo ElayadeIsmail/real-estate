@@ -1,10 +1,11 @@
-import { ListingPricePeriod, ListingType } from '@prisma/client';
+import { ListingType } from '@prisma/client';
 import express from 'express';
 import { check, param, query } from 'express-validator';
 import { PAGINATION_DEFAULT_LIMIT } from '../constants';
 import { listingsController } from '../controllers';
 import { requireAuth, upload, validateRequest } from '../middlewares';
 import { prisma } from '../prisma/prisma';
+import { ListingPricePeriod } from '../types/listings';
 
 // Create a new express Router
 const router = express.Router();

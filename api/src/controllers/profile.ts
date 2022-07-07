@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { rmdir } from 'fs/promises';
+import { rm } from 'fs/promises';
 import { join } from 'path';
 import { UPLOAD_FILE_PATH } from '../constants';
 import { prisma } from '../prisma/prisma';
@@ -47,10 +47,13 @@ const update = async (req: Request, res: Response) => {
     res.send(newUser);
 };
 
+// delete user
 const remove = async (req: Request, res: Response) => {
     const userId = req.currentUser!.id;
-    await prisma.user.delete({ where: { id: userId } });
-    await rmdir(join(UPLOAD_FILE_PATH, userId.toString()));
+    await Promise.all([
+        prisma.user.delete({ where: { id: userId } }),
+        rm(join(UPLOAD_FILE_PATH, userId.toString()), { recursive: true }),
+    ]);
     res.status(204).send({});
 };
 

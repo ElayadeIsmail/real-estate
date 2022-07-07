@@ -1,4 +1,11 @@
-import { ListingPricePeriod, ListingType } from '@prisma/client';
+import { ListingType } from '@prisma/client';
+
+export enum ListingPricePeriod {
+    Day = 'Day',
+    Week = 'Week',
+    Month = 'Month',
+    Year = 'Year',
+}
 
 export interface CreateListingsInput {
     title: string;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { rmdir } from 'fs/promises';
+import { rm } from 'fs/promises';
 import { join } from 'path';
 import { PAGINATION_MAX_LIMIT, UPLOAD_FILE_PATH } from '../constants';
 import { NotAuthorizedError, NotFoundError } from '../errors';
@@ -23,13 +23,11 @@ const findAll = async (req: Request, res: Response) => {
             },
             user: {
                 select: {
+                    id: true,
                     avatar: true,
                     firstName: true,
                     lastName: true,
                 },
-            },
-            price: {
-                select: { period: true, value: true },
             },
             zone: {
                 select: { name: true, city: { select: { name: true } } },
@@ -41,7 +39,7 @@ const findAll = async (req: Request, res: Response) => {
                 : {
                       id: cursor,
                   },
-        skip: 1,
+        skip: cursor === 0 ? undefined : 1,
         take: limitPlusOne,
         orderBy: {
             id: 'desc',
@@ -60,6 +58,34 @@ const findOne = async (req: Request, res: Response) => {
     const listing = await prisma.listing.findUnique({
         where: {
             slug,
+        },
+        include: {
+            images: {
+                select: {
+                    url: true,
+                    id: true,
+                },
+            },
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    phone: true,
+                    email: true,
+                    avatar: true,
+                },
+            },
+            zone: {
+                select: {
+                    name: true,
+                    city: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
     // if listing not found throw 404
@@ -129,10 +155,9 @@ const remove = async (req: Request, res: Response) => {
     await prisma.listing.delete({
         where: { id },
     });
-    await rmdir(
-        join(UPLOAD_FILE_PATH, listing.userId.toString(), listing.slug),
-        { recursive: true },
-    );
+    await rm(join(UPLOAD_FILE_PATH, listing.userId.toString(), listing.slug), {
+        recursive: true,
+    });
     res.status(204).send(listing);
 };
 
