@@ -65,7 +65,7 @@ model ListingImage {
   id        Int      @id @default(autoincrement())
   url       String
   listingId Int      @map("listing_id")
-  listing   Listing  @relation(fields: [listingId], references: [id])
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
@@ -81,7 +81,7 @@ model Listing {
   price       Json           @db.JsonB
   images      ListingImage[]
   userId      Int            @map("user_id")
-  user        User           @relation(fields: [userId], references: [id])
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   zoneId      Int            @map("zone_id")
   zone        Zone           @relation(fields: [zoneId], references: [id])
   bedrooms    Int

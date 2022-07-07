@@ -30,4 +30,6 @@ router.patch(
     profileController.update,
 );
 
+router.delete('/', requireAuth, profileController.remove);
+
 export { router as profileRouter };

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { rmdir } from 'fs/promises';
 import { join } from 'path';
 import { PAGINATION_MAX_LIMIT, UPLOAD_FILE_PATH } from '../constants';
 import { NotAuthorizedError, NotFoundError } from '../errors';
@@ -116,6 +117,7 @@ const remove = async (req: Request, res: Response) => {
         select: {
             id: true,
             userId: true,
+            slug: true,
         },
     });
     if (!listing) {
@@ -127,6 +129,10 @@ const remove = async (req: Request, res: Response) => {
     await prisma.listing.delete({
         where: { id },
     });
+    await rmdir(
+        join(UPLOAD_FILE_PATH, listing.userId.toString(), listing.slug),
+        { recursive: true },
+    );
     res.status(204).send(listing);
 };
 

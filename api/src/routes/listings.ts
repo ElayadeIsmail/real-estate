@@ -109,9 +109,7 @@ router.get(
         query('limit')
             .default(PAGINATION_DEFAULT_LIMIT)
             .toInt()
-            .isInt({
-                min: 10,
-            })
+            .isInt()
             .withMessage('Limit must be a number'),
         query('cursor')
             .default(0)
