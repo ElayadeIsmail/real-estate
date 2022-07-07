@@ -8,3 +8,6 @@ export const IS_PROD = process.env.NODE_ENV === 'production';
 export const TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 7; // 7 days
 export const PAGINATION_DEFAULT_LIMIT = 30;
 export const PAGINATION_MAX_LIMIT = 50;
+export const FRONTEND_URL = process.env.FRONTEND_URL;
+export const FORGOT_PASSWORD_PREFIX = 'FORGOT_PASSWORD_';
+export const CONFIRM_EMAIL_PREFIX = 'CONFIRM_EMAIL_';

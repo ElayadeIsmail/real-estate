@@ -1,15 +1,12 @@
 import { Request, Response } from 'express';
-import { readFile } from 'fs/promises';
 import jwt from 'jsonwebtoken';
-import { join } from 'path';
 import { BadRequestError } from '../errors';
+import { prisma } from '../prisma/prisma';
 import { deleteUserIfNotConfirmedQueue } from '../queues/delete-user-if-not-confirmed';
 import { sendEmail } from '../services/email';
 import { PasswordService } from '../services/password';
-import { prisma } from '../prisma/prisma';
 import { redis } from '../services/redis';
-import { createConfirmationUrl } from '../utils';
-import { excludeFields } from '../utils/exclude-fields';
+import { generateEmailHtml } from '../utils';
 
 // LOGIN ENDPOINT
 const login = async (req: Request, res: Response) => {
@@ -42,8 +39,7 @@ const login = async (req: Request, res: Response) => {
         },
         process.env.JWT_SECRET,
     );
-    excludeFields(user, 'password');
-    res.send({ accessToken: userJwt, user });
+    res.send({ accessToken: userJwt });
 };
 
 const register = async (req: Request, res: Response) => {
@@ -71,18 +67,9 @@ const register = async (req: Request, res: Response) => {
         },
     });
 
-    const confirmationUrl = await createConfirmationUrl(newUser.id);
-    // 4. Send a confirmation email to the user
-    const html = await readFile(
-        join(__dirname, '../../templates/confirm-email.html'),
-        'utf8',
-    );
+    const html = await generateEmailHtml(newUser.id, 'Confirmation');
 
-    await sendEmail(
-        newUser.email,
-        'Confirm your email',
-        html.replace('[%url%]"', confirmationUrl),
-    );
+    await sendEmail(newUser.email, 'Confirm your email', html);
 
     // add user to queue for deleting if not confirmed after one day
     deleteUserIfNotConfirmedQueue.add(
@@ -119,4 +106,79 @@ const confirmUser = async (req: Request, res: Response) => {
     res.send({ message: 'User confirmed' });
 };
 
-export default { login, register, currentUser, confirmUser };
+// function for changing user password
+const changePassword = async (req: Request, res: Response) => {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.currentUser!.id;
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId,
+        },
+    });
+    const isMatch = await PasswordService.compare(user!.password, oldPassword);
+    if (!isMatch) {
+        throw new BadRequestError('Invalid password');
+    }
+    if (oldPassword === newPassword) {
+        throw new BadRequestError(
+            'New password must be different from old password',
+        );
+    }
+    const hashedPassword = await PasswordService.toHash(newPassword);
+    await prisma.user.update({
+        where: {
+            id: userId,
+        },
+        data: {
+            password: hashedPassword,
+        },
+    });
+    res.send({ message: 'Password changed' });
+};
+
+const forgotPassword = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+    });
+    if (!user) {
+        throw new BadRequestError('Invalid email');
+    }
+    const html = await generateEmailHtml(user.id, 'ResetPassword');
+
+    await sendEmail(user.email, 'Reset your password', html);
+    res.send({ message: 'Password reset email sent' });
+};
+
+// function for resetting user password
+const resetPassword = async (req: Request, res: Response) => {
+    const { token, newPassword } = req.body;
+    const userId = await redis.get(token);
+    if (!userId) {
+        throw new BadRequestError('Invalid token');
+    }
+    const hashedPassword = await PasswordService.toHash(newPassword);
+    await Promise.all([
+        redis.del(token),
+        prisma.user.update({
+            where: {
+                id: parseInt(userId),
+            },
+            data: {
+                password: hashedPassword,
+            },
+        }),
+    ]);
+};
+
+export default {
+    login,
+    register,
+    currentUser,
+    confirmUser,
+    changePassword,
+    resetPassword,
+    forgotPassword,
+};
