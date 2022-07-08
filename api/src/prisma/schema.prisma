@@ -10,18 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Permissions {
+  BLOCK_USERS
+  UPROVE_LISTINGS
+}
+
 model User {
-  id          Int       @id @default(autoincrement())
-  email       String    @unique
-  firstName   String    @map("first_name")
-  lastName    String    @map("last_name")
-  avatar      String?   @default("avatar-placeholder.jpg") @map("avatar")
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  firstName   String        @map("first_name")
+  lastName    String        @map("last_name")
+  avatar      String?       @default("avatar-placeholder.jpg") @map("avatar")
   password    String
   phone       String
-  isConfirmed Boolean   @default(false)
-  isAdmin     Boolean   @default(false)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @default(now()) @map("updated_at")
+  permissions Permissions[]
+  isConfirmed Boolean       @default(false)
+  isAdmin     Boolean       @default(false)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @default(now()) @map("updated_at")
   listings    Listing[]
 
   @@map("users")
@@ -86,6 +92,7 @@ model Listing {
   zone        Zone           @relation(fields: [zoneId], references: [id])
   bedrooms    Int
   bathrooms   Int
+  views       Int            @default(0)
   area        Float
   address     String
   createdAt   DateTime       @default(now()) @map("created_at")
