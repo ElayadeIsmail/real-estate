@@ -143,6 +143,5 @@ router.post(
     authController.forgotPassword,
 );
 
-router.post('/');
 
 export { router as authRouter };
