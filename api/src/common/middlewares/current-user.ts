@@ -30,7 +30,7 @@ export const currentUser = async (
         // decode the JWT to get the user id and email
         const payload = jwt.verify(
             token,
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET!,
         ) as UserPayload;
         // add the user to the Request object
         req.currentUser = payload;

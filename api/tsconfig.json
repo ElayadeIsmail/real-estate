@@ -1,4 +1,6 @@
 {
+    "ts-node": { "files": true },
+    "files": ["src/index.ts", "src/env.d.ts"],
     "compilerOptions": {
         "target": "es2017",
         "module": "commonjs",
@@ -21,8 +23,19 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "resolveJsonModule": true,
-        "baseUrl": "."
+        "baseUrl": ".",
+        "paths": {
+            "@common/*": ["src/common/*"],
+            "@queues/*": ["src/queues/*"],
+            "@routes/*": ["src/routes/*"],
+            "@services/*": ["src/services/*"]
+        }
     },
     "exclude": ["node_modules"],
-    "include": ["./src/**/*.ts", "jest.config.ts", "src/prisma/prisma-test-environment.js", "src/prisma/prisma-test-environment.js"]
+    "include": [
+        "./src/**/*.ts",
+        "jest.config.ts",
+        "src/prisma/prisma-test-environment.js",
+        "src/prisma/prisma-test-environment.js"
+    ]
 }

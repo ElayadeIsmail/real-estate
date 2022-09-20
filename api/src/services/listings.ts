@@ -1,14 +1,14 @@
+import { PAGINATION_MAX_LIMIT, UPLOAD_FILE_PATH } from '@common/constants';
+import { NotAuthorizedError, NotFoundError } from '@common/errors';
+import { generateSlugFromTitle, renameFile } from '@common/utils';
 import { Request, Response } from 'express';
 import { rm } from 'fs/promises';
 import { join } from 'path';
-import { PAGINATION_MAX_LIMIT, UPLOAD_FILE_PATH } from '../constants';
-import { NotAuthorizedError, NotFoundError } from '../errors';
-import { prisma } from '../prisma/prisma';
 import {
     CreateListingsInput,
     ListingFindAllQueryArgs,
-} from '../types/listings';
-import { generateSlugFromTitle, renameFile } from '../utils';
+} from '../common/types/listings';
+import { prisma } from '../prisma/prisma';
 
 const findAll = async (req: Request, res: Response) => {
     const { limit, cursor } = req.query as unknown as ListingFindAllQueryArgs;

@@ -1,5 +1,5 @@
+import { IS_PROD } from '@common/constants';
 import nodeMailer from 'nodemailer';
-import { IS_PROD } from '../constants';
 
 const transporter = nodeMailer.createTransport({
     host: process.env.SMTP_HOST!,

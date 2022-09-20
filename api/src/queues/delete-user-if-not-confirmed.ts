@@ -1,5 +1,5 @@
 import bull from 'bull';
-import { prisma } from '../prisma/prisma';
+import { prisma } from 'src/prisma/prisma';
 import { QueuesNames } from './queues-names';
 
 // DELETE USER IF NOT CONFIRMED EMAIL IN 24 HOURS (1 DAY)

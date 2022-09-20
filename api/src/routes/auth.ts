@@ -1,7 +1,7 @@
+import { requireAuth, validateRequest } from '@common/middlewares';
+import { authService } from '@services/index';
 import express from 'express';
 import { check, param } from 'express-validator';
-import { authController } from '../controllers';
-import { requireAuth, validateRequest } from '../middlewares';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.post(
             .withMessage('You must supply a password'),
     ],
     validateRequest,
-    authController.login,
+    authService.login,
 );
 
 // register endpoint
@@ -64,11 +64,11 @@ router.post(
             }),
     ],
     validateRequest,
-    authController.register,
+    authService.register,
 );
 
 // get current user endpoint
-router.get('/currentuser', authController.currentUser);
+router.get('/currentuser', authService.currentUser);
 
 // Change password endpoint
 router.post(
@@ -102,7 +102,7 @@ router.post(
             }),
     ],
     validateRequest,
-    authController.changePassword,
+    authService.changePassword,
 );
 
 router.post(
@@ -133,15 +133,14 @@ router.post(
             .withMessage('Token must be valid'),
     ],
     validateRequest,
-    authController.resetPassword,
+    authService.resetPassword,
 );
 
 router.post(
     '/forgot-password',
     [check('email').isEmail().withMessage('Email must be valid')],
     validateRequest,
-    authController.forgotPassword,
+    authService.forgotPassword,
 );
-
 
 export { router as authRouter };
