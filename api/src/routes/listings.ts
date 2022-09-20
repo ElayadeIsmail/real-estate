@@ -1,11 +1,11 @@
+import { PAGINATION_DEFAULT_LIMIT } from '@common/constants';
+import { requireAuth, upload, validateRequest } from '@common/middlewares';
+import { ListingPricePeriod } from '@common/types/listings';
 import { ListingType } from '@prisma/client';
+import { listingsService } from '@services/index';
 import express from 'express';
 import { check, param, query } from 'express-validator';
-import { PAGINATION_DEFAULT_LIMIT } from '../constants';
-import { listingsController } from '../controllers';
-import { requireAuth, upload, validateRequest } from '../middlewares';
-import { prisma } from '../prisma/prisma';
-import { ListingPricePeriod } from '../types/listings';
+import { prisma } from 'src/prisma/prisma';
 
 // Create a new express Router
 const router = express.Router();
@@ -94,14 +94,14 @@ router.post(
         }),
     ],
     validateRequest,
-    listingsController.create,
+    listingsService.create,
 );
 
 router.get(
     '/:slug',
     param('slug').exists().isSlug().withMessage('Slug must be a valid slug'),
     validateRequest,
-    listingsController.findOne,
+    listingsService.findOne,
 );
 
 router.get(
@@ -121,7 +121,7 @@ router.get(
             .withMessage('Cursor must be a valid integer'),
     ],
     validateRequest,
-    listingsController.findAll,
+    listingsService.findAll,
 );
 
 router.put(
@@ -129,7 +129,7 @@ router.put(
     requireAuth,
     param('id').exists().toInt(),
     validateRequest,
-    listingsController.update,
+    listingsService.update,
 );
 
 router.delete(
@@ -137,7 +137,7 @@ router.delete(
     requireAuth,
     param('id').exists().toInt(),
     validateRequest,
-    listingsController.remove,
+    listingsService.remove,
 );
 
 export { router as listingsRouter };

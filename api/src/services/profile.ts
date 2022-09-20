@@ -1,10 +1,10 @@
+import { UPLOAD_FILE_PATH } from '@common/constants';
+import { renameFile } from '@common/utils';
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { rm } from 'fs/promises';
 import { join } from 'path';
-import { UPLOAD_FILE_PATH } from '../constants';
 import { prisma } from '../prisma/prisma';
-import { renameFile } from '../utils';
 
 const get = async (req: Request, res: Response) => {
     const userId = req.currentUser!.id;

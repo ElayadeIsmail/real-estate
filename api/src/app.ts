@@ -1,14 +1,8 @@
+import { currentUser, errorHandler } from '@common/middlewares';
+import { router } from '@routes/index';
 import express from 'express';
 import 'express-async-errors';
 import { join } from 'path';
-import { NotFoundError } from './errors';
-import { currentUser, errorHandler } from './middlewares';
-import {
-    authRouter,
-    citiesRouter,
-    listingsRouter,
-    profileRouter,
-} from './routes';
 
 // Create a new express application
 const app = express();
@@ -25,21 +19,7 @@ app.use('upload', express.static(join(__dirname, '..', 'public', 'upload')));
 // add the currentUser middleware to all routes
 app.use(currentUser);
 
-// register the auth routes
-app.use('/auth', authRouter);
-
-// register the profile routes
-app.use('/profile', profileRouter);
-
-// register the cities routes
-app.use('/cities', citiesRouter);
-
-// register the listings routes
-app.use('/listings', listingsRouter);
-
-app.all('*', () => {
-    throw new NotFoundError();
-});
+router(app);
 
 app.use(errorHandler);
 

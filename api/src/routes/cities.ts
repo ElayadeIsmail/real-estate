@@ -1,8 +1,8 @@
+import { citiesService } from '@services/index';
 import express from 'express';
-import { citiesController } from '../controllers';
 
 const router = express.Router();
 
-router.get('/', citiesController.findAll);
+router.get('/', citiesService.findAll);
 
 export { router as citiesRouter };

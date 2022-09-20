@@ -1,12 +1,12 @@
-import { readFile } from 'fs/promises';
-import { join } from 'path';
-import { v4 } from 'uuid';
 import {
     CONFIRM_EMAIL_PREFIX,
     FORGOT_PASSWORD_PREFIX,
     FRONTEND_URL,
-} from '../constants';
-import { redis } from '../services/redis';
+} from '@common/constants';
+import { redis } from '@common/services';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
+import { v4 } from 'uuid';
 
 const templatesOptions = {
     Confirmation: {

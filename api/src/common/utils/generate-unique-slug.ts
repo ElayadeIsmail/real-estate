@@ -1,5 +1,5 @@
 import slugify from 'slugify';
-import { prisma } from '../prisma/prisma';
+import { prisma } from '../../prisma/prisma';
 
 const isSlugExist = async (slug: string) => {
     const count = await prisma.listing.count({ where: { slug } });
