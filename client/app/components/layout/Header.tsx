@@ -1,13 +1,15 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-
+import { Link } from '@remix-run/react';
 export const Header = () => {
 	return (
 		<header className='border-b p-4'>
 			<div className='container flex items-center justify-between'>
 				{/* log0 */}
-				<figure className='h-8 w-8 bg-secondary-500'>
-					{/* <img src="" alt="" className="" /> */}
-				</figure>
+				<Link to={"/"}>
+					<figure className='h-8 w-8 bg-secondary-500'>
+						{/* <img src="" alt="" className="" /> */}
+					</figure>
+				</Link>
 				{/* search box*/}
 				<div className='flex gap-2 divide-x border px-4 py-2 rounded-full shadow-md hover:shadow-lg duration-200'>
 					<button className='text-sm font-medium'>Anywhere</button>
@@ -64,13 +66,13 @@ export const Header = () => {
 						<DropdownMenu.Portal>
 							<DropdownMenu.Content className='w-44 bg-white py-4 shadow-md text-sm rounded-lg'>
 								<DropdownMenu.Item className='outline-none hover:bg-black/5 px-4 py-2.5 cursor-pointer '>
-									Sign up
+									<Link to={'/sign-up'}>Sign up</Link>
 								</DropdownMenu.Item>
 								<DropdownMenu.Item className='outline-none hover:bg-black/5 px-4 py-2.5 cursor-pointer '>
-									Log in
+									<Link to={'/login'}>Log in</Link>
 								</DropdownMenu.Item>
 
-								<DropdownMenu.Separator className='h-[1px] bg-slate-100'/>
+								<DropdownMenu.Separator className='h-[1px] bg-slate-100' />
 								<DropdownMenu.Item className='outline-none hover:bg-black/5 px-4 py-2.5 cursor-pointer '>
 									Host your home
 								</DropdownMenu.Item>
