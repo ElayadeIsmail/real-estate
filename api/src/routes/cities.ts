@@ -1,5 +1,5 @@
-import { citiesService } from '@services/index';
 import express from 'express';
+import { citiesService } from '../services';
 
 const router = express.Router();
 

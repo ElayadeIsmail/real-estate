@@ -1,9 +1,9 @@
-import { MAX_FILE_SIZE } from '@common/constants';
-import { BadRequestError } from '@common/errors';
 import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { v4 as uuid } from 'uuid';
+import { MAX_FILE_SIZE } from '../constants';
+import { BadRequestError } from '../errors';
 
 // Multer upload options
 export const multerOptions = {

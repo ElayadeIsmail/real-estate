@@ -1,13 +1,13 @@
-import { PAGINATION_MAX_LIMIT, UPLOAD_FILE_PATH } from '@common/constants';
-import { NotAuthorizedError, NotFoundError } from '@common/errors';
-import { generateSlugFromTitle, renameFile } from '@common/utils';
 import { Request, Response } from 'express';
 import { rm } from 'fs/promises';
 import { join } from 'path';
+import { PAGINATION_MAX_LIMIT, UPLOAD_FILE_PATH } from '../common/constants';
+import { NotAuthorizedError, NotFoundError } from '../common/errors';
 import {
     CreateListingsInput,
     ListingFindAllQueryArgs,
 } from '../common/types/listings';
+import { generateSlugFromTitle, renameFile } from '../common/utils';
 import { prisma } from '../prisma/prisma';
 
 const findAll = async (req: Request, res: Response) => {

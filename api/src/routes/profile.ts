@@ -1,7 +1,7 @@
-import { requireAuth, upload, validateRequest } from '@common/middlewares';
-import { profileService } from '@services/index';
 import express from 'express';
 import { body, check } from 'express-validator';
+import { requireAuth, upload, validateRequest } from '../common/middlewares';
+import { profileService } from '../services';
 
 // Create a new express Router
 const router = express.Router();

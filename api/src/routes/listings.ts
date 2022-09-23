@@ -1,11 +1,11 @@
-import { PAGINATION_DEFAULT_LIMIT } from '@common/constants';
-import { requireAuth, upload, validateRequest } from '@common/middlewares';
-import { ListingPricePeriod } from '@common/types/listings';
 import { ListingType } from '@prisma/client';
-import { listingsService } from '@services/index';
 import express from 'express';
 import { check, param, query } from 'express-validator';
-import { prisma } from 'src/prisma/prisma';
+import { PAGINATION_DEFAULT_LIMIT } from '../common/constants';
+import { requireAuth, upload, validateRequest } from '../common/middlewares';
+import { ListingPricePeriod } from '../common/types/listings';
+import { prisma } from '../prisma/prisma';
+import { listingsService } from '../services';
 
 // Create a new express Router
 const router = express.Router();

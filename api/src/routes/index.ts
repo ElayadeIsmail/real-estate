@@ -1,5 +1,5 @@
-import { NotFoundError } from '@common/errors';
 import { Express } from 'express';
+import { NotFoundError } from '../common/errors';
 import { authRouter } from './auth';
 import { citiesRouter } from './cities';
 import { listingsRouter } from './listings';

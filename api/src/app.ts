@@ -1,8 +1,8 @@
-import { currentUser, errorHandler } from '@common/middlewares';
-import { router } from '@routes/index';
 import express from 'express';
 import 'express-async-errors';
 import { join } from 'path';
+import { currentUser, errorHandler } from './common/middlewares';
+import { router } from './routes';
 
 // Create a new express application
 const app = express();

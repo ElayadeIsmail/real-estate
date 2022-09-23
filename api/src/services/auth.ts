@@ -1,10 +1,10 @@
-import { BadRequestError } from '@common/errors';
-import { PasswordService, redis, sendEmail } from '@common/services';
-import { generateEmailHtml } from '@common/utils';
-import { deleteUserIfNotConfirmedQueue } from '@queues/index';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { BadRequestError } from '../common/errors';
+import { PasswordService, redis, sendEmail } from '../common/services';
+import { generateEmailHtml } from '../common/utils';
 import { prisma } from '../prisma/prisma';
+import { deleteUserIfNotConfirmedQueue } from '../queues';
 
 // LOGIN ENDPOINT
 const login = async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
-import { requireAuth, validateRequest } from '@common/middlewares';
-import { authService } from '@services/index';
 import express from 'express';
 import { check, param } from 'express-validator';
+import { requireAuth, validateRequest } from '../common/middlewares';
+import { authService } from '../services';
 
 const router = express.Router();
 

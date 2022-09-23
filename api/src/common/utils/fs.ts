@@ -1,7 +1,7 @@
-import { TEMP_FILE_PATH } from '@common/constants';
 import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { rename } from 'fs/promises';
 import { join } from 'path';
+import { TEMP_FILE_PATH } from '../constants';
 
 // function for renaming a file
 export const renameFile = async (fileName: string, newPath: string) => {

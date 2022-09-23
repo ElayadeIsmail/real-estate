@@ -1,9 +1,9 @@
-import { UPLOAD_FILE_PATH } from '@common/constants';
-import { renameFile } from '@common/utils';
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { rm } from 'fs/promises';
 import { join } from 'path';
+import { UPLOAD_FILE_PATH } from '../common/constants';
+import { renameFile } from '../common/utils';
 import { prisma } from '../prisma/prisma';
 
 const get = async (req: Request, res: Response) => {
