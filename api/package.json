@@ -6,10 +6,11 @@
     "scripts": {
         "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
         "start": "ts-node src/index.ts",
-        "dev": "ts-node-dev src/index.ts",
+        "dev": "ts-node-dev --poll src/index.ts",
         "test": "jest --watchAll --no-cache",
         "makemigrations": "npx prisma migrate dev",
         "migrate": "npx prisma migrate deploy",
+        "dev:migrate": "npx prisma migrate dev --name init",
         "db:reset": "npx prisma migrate reset",
         "db:seed": "npx prisma db seed"
     },

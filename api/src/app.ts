@@ -1,7 +1,8 @@
 import express from 'express';
 import 'express-async-errors';
 import { join } from 'path';
-import { currentUser, errorHandler } from './common/middlewares';
+import { IS_PROD } from './common/constants';
+import { currentUser, errorHandler, logger } from './common/middlewares';
 import { router } from './routes';
 
 // Create a new express application
@@ -18,6 +19,11 @@ app.use('upload', express.static(join(__dirname, '..', 'public', 'upload')));
 
 // add the currentUser middleware to all routes
 app.use(currentUser);
+
+// add logger middleware if is not prof
+if (!IS_PROD) {
+    app.use(logger);
+}
 
 router(app);
 

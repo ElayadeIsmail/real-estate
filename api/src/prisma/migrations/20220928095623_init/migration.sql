@@ -1,35 +1,29 @@
-/*
-  Warnings:
+-- CreateEnum
+CREATE TYPE "Permissions" AS ENUM ('BLOCK_USERS', 'UPROVE_LISTINGS');
 
-  - You are about to drop the `City` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Listing` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `ListingImage` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Zone` table. If the table is not empty, all the data it contains will be lost.
+-- CreateEnum
+CREATE TYPE "ListingType" AS ENUM ('Rent', 'Sale');
 
-*/
--- DropForeignKey
-ALTER TABLE "Listing" DROP CONSTRAINT "Listing_listing_price_id_fkey";
+-- CreateEnum
+CREATE TYPE "ListingPricePeriod" AS ENUM ('Day', 'Week', 'Month', 'Year');
 
--- DropForeignKey
-ALTER TABLE "Listing" DROP CONSTRAINT "Listing_zone_id_fkey";
+-- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "first_name" TEXT NOT NULL,
+    "last_name" TEXT NOT NULL,
+    "avatar" TEXT DEFAULT E'avatar-placeholder.jpg',
+    "password" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "permissions" "Permissions"[],
+    "isConfirmed" BOOLEAN NOT NULL DEFAULT false,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
--- DropForeignKey
-ALTER TABLE "ListingImage" DROP CONSTRAINT "ListingImage_listing_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "Zone" DROP CONSTRAINT "Zone_city_id_fkey";
-
--- DropTable
-DROP TABLE "City";
-
--- DropTable
-DROP TABLE "Listing";
-
--- DropTable
-DROP TABLE "ListingImage";
-
--- DropTable
-DROP TABLE "Zone";
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "cities" (
@@ -68,12 +62,14 @@ CREATE TABLE "listings" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
-    "descripton" JSONB,
+    "description" JSONB NOT NULL,
     "type" "ListingType" NOT NULL,
-    "listing_price_id" INTEGER NOT NULL,
+    "price" JSONB NOT NULL,
+    "user_id" INTEGER NOT NULL,
     "zone_id" INTEGER NOT NULL,
     "bedrooms" INTEGER NOT NULL,
     "bathrooms" INTEGER NOT NULL,
+    "views" INTEGER NOT NULL DEFAULT 0,
     "area" DOUBLE PRECISION NOT NULL,
     "address" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -81,6 +77,9 @@ CREATE TABLE "listings" (
 
     CONSTRAINT "listings_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "cities_name_key" ON "cities"("name");
@@ -91,17 +90,14 @@ CREATE UNIQUE INDEX "zones_name_key" ON "zones"("name");
 -- CreateIndex
 CREATE UNIQUE INDEX "listings_slug_key" ON "listings"("slug");
 
--- CreateIndex
-CREATE UNIQUE INDEX "listings_listing_price_id_key" ON "listings"("listing_price_id");
-
 -- AddForeignKey
 ALTER TABLE "zones" ADD CONSTRAINT "zones_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "listing_images" ADD CONSTRAINT "listing_images_listing_id_fkey" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "listing_images" ADD CONSTRAINT "listing_images_listing_id_fkey" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "listings" ADD CONSTRAINT "listings_listing_price_id_fkey" FOREIGN KEY ("listing_price_id") REFERENCES "listing_prices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "listings" ADD CONSTRAINT "listings_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "listings" ADD CONSTRAINT "listings_zone_id_fkey" FOREIGN KEY ("zone_id") REFERENCES "zones"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

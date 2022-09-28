@@ -1,0 +1,27 @@
+FROM node:16.17.0-alpine
+
+RUN apk add --no-cache --upgrade bash
+
+RUN addgroup app && adduser -S -G app app
+USER app
+
+
+WORKDIR /app
+
+COPY package.json .
+COPY wait-for-it.sh ./
+COPY docker-entrypoint.sh ./
+
+RUN yarn install 
+
+COPY ./ ./
+
+USER root
+
+RUN chmod +x /app/wait-for-it.sh 
+RUN chmod +x /app/docker-entrypoint.sh
+
+USER app
+
+EXPOSE 5000
+

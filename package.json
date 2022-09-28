@@ -1,0 +1,12 @@
+{
+    "name": "real-estate",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "git@github.com:ElayadeIsmail/real-estate.git",
+    "author": "Elayede Ismail <elayadeismail@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "docker:up": "docker-compose up -d",
+        "docker:down": "docker-compose down"
+    }
+}
