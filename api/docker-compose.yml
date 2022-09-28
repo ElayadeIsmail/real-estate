@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
     api:
-        build: ./api
+        build: .
         command: ./wait-for-it.sh postgres:5432 -- ./docker-entrypoint.sh
         ports:
             - '5000:5000'
@@ -11,7 +11,7 @@ services:
             - redis
         restart: on-failure
         volumes:
-            - ./api:/app
+            - .:/app
         environment:
             - PORT=5000
             - DATABASE_URL=postgresql://postgres:MyPassword@postgres:5432/db?schema=public
@@ -23,6 +23,11 @@ services:
             - SMTP_PORT=123123
             - MAILER_FROM=admin
             - FRONTEND_URL=localhost
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - 1025:1025
+            - 8025:8025
     postgres:
         image: postgres
         ports:

@@ -12,7 +12,9 @@
         "migrate": "npx prisma migrate deploy",
         "dev:migrate": "npx prisma migrate dev --name init",
         "db:reset": "npx prisma migrate reset",
-        "db:seed": "npx prisma db seed"
+        "db:seed": "npx prisma db seed",
+        "docker:up": "docker-compose up -d",
+        "docker:down": "docker-compose down"
     },
     "dependencies": {
         "@prisma/client": "^3.15.2",
