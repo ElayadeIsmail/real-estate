@@ -1,0 +1,37 @@
+# Set the version of docker compose to use
+version: '3.9'
+# The containers that compose the project
+services:
+    api:
+        build:
+            context: .
+            dockerfile: Dockerfile.test
+        command: ./wait-for-it.sh db:5432 -- ./docker-entrypoint.test.sh
+        depends_on:
+            - db
+            - test-redis
+        restart: on-failure
+        volumes:
+            - .:/app
+        env_file:
+            - .env.test
+    db:
+        image: postgres
+        restart: always
+        ports:
+            - '5433:5432'
+        environment:
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: test
+            POSTGRES_DB: tests
+    test-redis:
+        container_name: redis-test
+        image: redis
+        command: redis-server
+        ports:
+            - 6380:6379
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - 1026:1025
+            - 8026:8025

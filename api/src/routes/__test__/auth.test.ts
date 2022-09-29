@@ -1,21 +1,19 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { prisma } from '../../prisma/prisma';
-
-afterAll(async () => {
-    await prisma.$disconnect();
-});
+//
 
 it('should create a new user', async () => {
-    const user = await prisma.user.create({
-        data: {
+    return request(app).get('/healthcheck').send({}).expect(200);
+});
+it('should create a new user', async () => {
+    return request(app)
+        .post('/auth/login')
+        .send({
             email: 'sam@gmail.com',
-            firstName: 'sam',
-            lastName: 'sam',
-            password: 'randompasssword',
-            phone: '0021212121',
-        },
-    });
-    expect(user.id).toEqual(1);
-    return request(app).send({});
+            password: 'MyStrong@pASSWORD',
+        })
+        .expect(400);
+});
+it('should create a new user', async () => {
+    return request(app).get('/listings').send().expect(200);
 });
